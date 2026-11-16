@@ -8,7 +8,7 @@ Single Responsibility Principle:
 
 from collections.abc import Iterator
 
-from product import Product
+from products.product import Product
 
 
 class Inventory:

@@ -9,10 +9,10 @@ Single Responsibility Principle:
 import json
 import os
 
-from digital_product import DigitalProduct
+from products.digital_product import DigitalProduct
 from inventory import Inventory
-from physical_product import PhysicalProduct
-from product import Product
+from products.physical_product import PhysicalProduct
+from products.product import Product
 
 # Maps the JSON "type" identifier to its product class.
 PRODUCT_TYPES: dict[str, type[Product]] = {

@@ -12,10 +12,10 @@ JSON file handling is delegated to an InventoryFileHandler.
 
 from collections.abc import Callable
 
-from digital_product import DigitalProduct
+from products.digital_product import DigitalProduct
 from inventory import Inventory
 from inventory_file_handler import InventoryFileHandler
-from physical_product import PhysicalProduct
+from products.physical_product import PhysicalProduct
 from supplier import Supplier
 
 INVENTORY_FILE = "inventory.json"

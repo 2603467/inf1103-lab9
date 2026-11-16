@@ -1,4 +1,4 @@
-from product import CanBeShipped, Product
+from products.product import CanBeShipped, Product
 from supplier import Supplier
 
 
