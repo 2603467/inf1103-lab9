@@ -14,10 +14,12 @@ from collections.abc import Callable
 
 from inventory import Inventory
 from inventory_file_handler import InventoryFileHandler
+from product_file_handler import load_products
 from products import ProductFactory
 from supplier import Supplier
 
 INVENTORY_FILE = "inventory.json"
+PRODUCTS_FILE = "products.csv"
 file_handler = InventoryFileHandler(INVENTORY_FILE)
 
 
@@ -55,6 +57,26 @@ def read_number(prompt: str, cast: Callable[[str], float],
         return value
 
 
+def get_positive_float(prompt: str) -> float:
+    """Keep asking until the user enters a positive number."""
+    while True:
+        try:
+            value = float(input(prompt))
+        except ValueError:
+            print("Please enter a valid number, e.g. 12.50")
+            continue
+        if value <= 0:
+            print("Please enter a number greater than zero.")
+            continue
+        return value
+
+
+def load_products_menu(inventory: Inventory) -> None:
+    load_products(PRODUCTS_FILE, inventory,
+                  Supplier("S1", "Default Supplier",
+                           "supplier@example.com"))
+
+
 def handle_add(inventory: Inventory) -> None:
     print("\nAdd New Product")
     product_id = input("Product ID: ")
@@ -63,7 +85,7 @@ def handle_add(inventory: Inventory) -> None:
         return
 
     name = input("Product Name: ")
-    price = read_number("Price: ", float)
+    price = get_positive_float("Price: ")
     stock = read_number("Stock Quantity: ", int)
 
     print("\nSupplier details:")
@@ -89,8 +111,12 @@ def handle_add(inventory: Inventory) -> None:
 
     size = read_number(size_prompt, float, minimum=0.01)
 
-    product = ProductFactory.create(product_type, product_id, name, price,
-                                    stock, supplier, size)
+    try:
+        product = ProductFactory.create(product_type, product_id, name,
+                                        price, stock, supplier, size)
+    except ValueError as error:
+        print(f"\n[Error] Could not create product: {error}")
+        return
 
     inventory.add_product(product)
     print("\nProduct added successfully!")
@@ -134,7 +160,8 @@ def print_menu() -> None:
     print("3. Update Stock")
     print("4. Search Product")
     print("5. Save Inventory")
-    print("6. Exit")
+    print("6. Load Products from CSV")
+    print("7. Exit")
     print("----------------------------")
 
 
@@ -161,13 +188,16 @@ def main() -> None:
             print("\nSaving inventory...")
             save_inventory(inventory)
         elif option == "6":
+            print("\nLoading products from CSV...")
+            load_products_menu(inventory)
+        elif option == "7":
             print("\nSaving inventory before exit...")
             save_inventory(inventory)
             print("\nThank you for using Inventory Management System.")
             print("Program terminated.")
             break
         else:
-            print("\nInvalid option. Please enter 1-6.")
+            print("\nInvalid option. Please enter 1-7.")
 
 
 if __name__ == "__main__":
