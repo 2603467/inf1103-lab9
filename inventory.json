@@ -1,0 +1,28 @@
+[
+    {
+        "id": "P1",
+        "name": "Keyboard",
+        "price": 49.99,
+        "stock": 10,
+        "supplier": {
+            "id": "S1",
+            "name": "test",
+            "contact_email": "test@gmail.com"
+        },
+        "type": "physical",
+        "weight": 1.2
+    },
+    {
+        "id": "P2",
+        "name": "Ebook",
+        "price": 9.99,
+        "stock": 100,
+        "supplier": {
+            "id": "S1",
+            "name": "test",
+            "contact_email": "test@gmail.com"
+        },
+        "type": "digital",
+        "download_size": 5.5
+    }
+]
