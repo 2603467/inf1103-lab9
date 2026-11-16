@@ -12,10 +12,9 @@ JSON file handling is delegated to an InventoryFileHandler.
 
 from collections.abc import Callable
 
-from products.digital_product import DigitalProduct
 from inventory import Inventory
 from inventory_file_handler import InventoryFileHandler
-from products.physical_product import PhysicalProduct
+from products import ProductFactory
 from supplier import Supplier
 
 INVENTORY_FILE = "inventory.json"
@@ -79,16 +78,19 @@ def handle_add(inventory: Inventory) -> None:
     type_choice = input("Choose type: ")
 
     if type_choice == "1":
-        weight = read_number("\nWeight (kg): ", float, minimum=0.01)
-        product = PhysicalProduct(product_id, name, price, stock, supplier,
-                                  weight)
+        product_type = "physical"
+        size_prompt = "\nWeight (kg): "
     elif type_choice == "2":
-        size = read_number("\nDownload Size (MB): ", float, minimum=0.01)
-        product = DigitalProduct(product_id, name, price, stock, supplier,
-                                 size)
+        product_type = "digital"
+        size_prompt = "\nDownload Size (MB): "
     else:
         print("\n[Error] Invalid product type.")
         return
+
+    size = read_number(size_prompt, float, minimum=0.01)
+
+    product = ProductFactory.create(product_type, product_id, name, price,
+                                    stock, supplier, size)
 
     inventory.add_product(product)
     print("\nProduct added successfully!")
